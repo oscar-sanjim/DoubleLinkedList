@@ -47,7 +47,7 @@
 #include <stdio.h>                                    /* Used for printf */
 #include <stdlib.h>                      /* Used for malloc, & EXIT codes*/
 #include <assert.h>                         /* Used for the assert macro */
-#include <strings.h>                                       /* For strcmp */
+#include <string.h>                                       /* For strcmp */
 #include "FileIO.h"        /* Used for the file access support functions */
 #include "GenericLists.h"      /* Used for all list management functions */
 #include "UserDefined.h"                /* All the user defined functions*/
