@@ -73,7 +73,7 @@ int Delete(list_p myList_p, node_p item_p, void **data_h){
 
 int Insert(list_p myList_p, node_p item_p, const void *data_p){
 	
-	node_p temp;
+	node_p temp = malloc(sizeof(node_p));
 	temp->data_p = data_p;
 
 	if(myList_p->numItems == 0)
@@ -103,13 +103,15 @@ int Insert(list_p myList_p, node_p item_p, const void *data_p){
 			item_p->prev_p = temp;
 		}
 	}
-	
+	return EXIT_SUCCESS;
 
 }
 
 list_p DuplicateList (list_p sourceList_p) {
-	list_p newlist;
-	node_p temp, iterator;
+	list_p newlist = malloc(sizeof(list_p));
+	node_p temp = malloc(sizeof(node_p));
+	node_p iterator = malloc(sizeof(node_p));
+
 	if(NULL != sourceList_p->head_p)
 	{
 		temp->data_p = sourceList_p->head_p->data_p;
@@ -144,12 +146,13 @@ int SortList (list_p myList_p, int key){
 
 int PrintList(list_p myList_p){
 	node_p temp;
-	for (temp = myList_p->head_p; temp != NULL; temp->next_p)
+	for (temp = myList_p->head_p; temp != NULL; temp = temp->next_p)
 	{
 		myList_p->print(temp->data_p);
 	}
+	
 	return EXIT_SUCCESS;
 }
 node_p FindInList (list_p myList_p, const void *value_p, int key){
-	
+
 }
