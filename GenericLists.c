@@ -62,7 +62,7 @@ int Delete(list_p myList_p, node_p item_p, void **data_h){
 		 			temp->next_p->prev_p = temp->prev_p;
 		 		}
 	 		}
-	 		myList_p->destroy(temp);
+	 		myList_p->destroy(temp->data_p);
 	 		myList_p->numItems--;
 
 	 		break;
