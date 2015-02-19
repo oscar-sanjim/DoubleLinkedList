@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include "UserDefined.h"
 
@@ -10,11 +11,11 @@ int PrintItem(const void *data)
 	return EXIT_SUCCESS;
 }
 
-int FreeItem     (const void *data){
-	/*free((myData *)data->theString);
-	(myData *)data->number = 0;
-	free(data);*/
-
+int FreeItem (const void *data){
+	myData * cast = (myData *)data;
+	free(cast->theString);
+	cast->number = 0;
+	free(cast);
 	return EXIT_SUCCESS;
 }
 
@@ -32,9 +33,8 @@ int CompareItems (const void *item1_p, const void *item2_p, int key){
 		if(key == INT)
 		{
 			if(valor1->number  == valor2->number) return 0;
-			if(valor1->number  <  valor2->number) return 1;
-			if(valor1->number  >  valor2->number) return 2;
-			if(valor1->number !=  valor2->number) return 3;
+			else if(valor1->number  <  valor2->number) return 1;
+			else if(valor1->number  >  valor2->number) return 2;
 		}
 
 		if(key == STR)
@@ -52,6 +52,12 @@ int CompareItems (const void *item1_p, const void *item2_p, int key){
 
 	return -1;
 }
+
 void * CopyItems (const void *source_p){
-	return source_p;
+	myData * newNode = malloc(sizeof(myData));
+	myData *cast = (myData *)source_p;
+	newNode->number = cast->number;
+	newNode->theString = malloc(sizeof(cast->theString));
+	strcpy(newNode->theString,cast->theString);
+	return newNode;
 }

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "GenericLists.h"
+#include <stdio.h>
 
 //******************************
 //**** Definición de Métodos ***
@@ -30,7 +31,8 @@ int DestroyList(list_p myList_p){
 	node_p temp;
 	for (temp = myList_p->head_p; temp->next_p != NULL; temp = temp->next_p)
 	{
-	 	myList_p->destroy(temp);
+	 	myList_p->destroy(temp->data_p);
+	 	free(temp);
 	}
 	free(myList_p); 
 	return EXIT_SUCCESS;
@@ -43,7 +45,7 @@ int Delete(list_p myList_p, node_p item_p, void **data_h){
 	{
 	 	if (temp == item_p)
 	 	{
-	 		data_h = item_p->data_p;
+	 		data_h = &item_p->data_p;
 
 	 		if(temp == myList_p->head_p)
 	 		{
@@ -63,6 +65,7 @@ int Delete(list_p myList_p, node_p item_p, void **data_h){
 		 		}
 	 		}
 	 		myList_p->destroy(temp->data_p);
+	 		free(temp);
 	 		myList_p->numItems--;
 
 	 		break;
@@ -74,7 +77,7 @@ int Delete(list_p myList_p, node_p item_p, void **data_h){
 int Insert(list_p myList_p, node_p item_p, const void *data_p){
 	
 	node_p temp = malloc(sizeof(node_p));
-	temp->data_p = data_p;
+	temp->data_p = myList_p->copy(data_p);
 
 	if(myList_p->numItems == 0)
 	{
@@ -89,6 +92,7 @@ int Insert(list_p myList_p, node_p item_p, const void *data_p){
 		{
 			myList_p->tail_p->next_p = temp;
 			temp->next_p = NULL;
+			temp->prev_p =  myList_p->tail_p;
 			myList_p->tail_p = temp;
 			myList_p->numItems++;
 		}
@@ -98,9 +102,14 @@ int Insert(list_p myList_p, node_p item_p, const void *data_p){
 			{
 				myList_p->head_p = temp;
 			}
+			else
+			{
+				item_p->prev_p->next_p = temp;
+			}
 			temp->prev_p = item_p->prev_p;
 			temp->next_p = item_p;
 			item_p->prev_p = temp;
+
 		}
 	}
 	return EXIT_SUCCESS;
@@ -114,7 +123,7 @@ list_p DuplicateList (list_p sourceList_p) {
 
 	if(NULL != sourceList_p->head_p)
 	{
-		temp->data_p = sourceList_p->head_p->data_p;
+		temp->data_p = sourceList_p->copy(temp->data_p);
 		temp->prev_p = NULL;
 		newlist->head_p = temp;
 		newlist->numItems = 1;
@@ -122,8 +131,8 @@ list_p DuplicateList (list_p sourceList_p) {
 
 		for(iterator=sourceList_p->head_p->next_p; iterator!=NULL; iterator=iterator->next_p)
 		{
-			node_p created;
-			created->data_p = iterator->data_p;
+			node_p created = malloc(sizeof(node_p));
+			created->data_p = sourceList_p->copy(iterator->data_p);
 			created->prev_p = temp;
 			temp->next_p = created;
 
@@ -153,6 +162,15 @@ int PrintList(list_p myList_p){
 	
 	return EXIT_SUCCESS;
 }
-node_p FindInList (list_p myList_p, const void *value_p, int key){
 
+node_p FindInList (list_p myList_p, const void *value_p, int key){
+	node_p temp;
+	for (temp = myList_p->head_p; temp!= NULL; temp = temp->next_p)
+	{
+		if (myList_p->compare(temp->data_p, value_p, key) == EQUAL)
+		{
+			return temp;
+		}
+	}
+	return NULL;
 }

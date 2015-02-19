@@ -178,7 +178,7 @@ int main (int argc, const char * argv[]) {
 //                printf("Copy of the list was deleted successfully\n");
             
             /***** Test deletion in the middle *****/
-            aNode = FindInList(theList_p, "Gyro Gearloose", SINGLESTR);
+            aNode = FindInList(theList_p, "Donald", SINGLESTR);
             if (aNode == NULL){
                 printf("Error: failed to find selected node \n");
             }
@@ -198,6 +198,10 @@ int main (int argc, const char * argv[]) {
             } else
                 printf("Error deleting from the head\n");
             
+            printf("Deletion from head & middle:\n");
+            if (PrintList(theList_p) != EXIT_SUCCESS)
+                printf("Error printing the list\n");
+
             /***** Destroy the list *****/
             if (DestroyList(theList_p) != EXIT_SUCCESS)
                 printf ("Error deleting the list\n");
