@@ -46,39 +46,50 @@ int DestroyList(list_p myList_p){
 
 
 int Delete(list_p myList_p, node_p item_p, void **data_h){
-	if ((myList_p == NULL)||(item_p == NULL)){
+	if (myList_p == NULL){
 		return EXIT_FAILURE;
 	}
 	else {
 		node_p temp;
-		for (temp = myList_p->head_p; temp->next_p != NULL; temp = temp->next_p)
+		if(item_p == NULL)
 		{
-		 	if (temp == item_p)
-		 	{
-		 		data_h = &item_p->data_p;
+			temp = myList_p->head_p;
+			myList_p->head_p = temp->next_p;
+		 	temp->next_p->prev_p = NULL;
+		 	free(temp);
+			myList_p->numItems--;
+		}
+		else
+		{
+			for (temp = myList_p->head_p; temp->next_p != NULL; temp = temp->next_p)
+			{
+			 	if (temp == item_p)
+			 	{
+			 		data_h = &item_p->data_p;
 
-		 		if(temp == myList_p->head_p)
-		 		{
-		 			myList_p->head_p = temp->next_p;
-		 			temp->next_p->prev_p = NULL;
-		 		}
-		 		else{
-		 			if(temp == myList_p->tail_p)
+			 		if(temp == myList_p->head_p)
 			 		{
-			 			myList_p->tail_p = temp->prev_p;
-			 			temp->prev_p->next_p = NULL;
+			 			myList_p->head_p = temp->next_p;
+			 			temp->next_p->prev_p = NULL;
 			 		}
-			 		else
-			 		{
-			 			temp->prev_p->next_p = temp->next_p;
-			 			temp->next_p->prev_p = temp->prev_p;
+			 		else{
+			 			if(temp == myList_p->tail_p)
+				 		{
+				 			myList_p->tail_p = temp->prev_p;
+				 			temp->prev_p->next_p = NULL;
+				 		}
+				 		else
+				 		{
+				 			temp->prev_p->next_p = temp->next_p;
+				 			temp->next_p->prev_p = temp->prev_p;
+				 		}
 			 		}
-		 		}
-		 		free(temp);
-		 		myList_p->numItems--;
+			 		free(temp);
+			 		myList_p->numItems--;
 
-		 		break;
-		 	}
+			 		break;
+			 	}
+			}
 		}
 		return EXIT_SUCCESS;
 	}
