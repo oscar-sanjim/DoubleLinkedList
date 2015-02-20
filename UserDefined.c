@@ -14,7 +14,7 @@ int PrintItem(const void *data)
 int FreeItem (const void *data){
 	myData * cast = (myData *)data;
 	free(cast->theString);
-	cast->number = 0;
+	//cast->number = 0;
 	free(cast);
 	return EXIT_SUCCESS;
 }

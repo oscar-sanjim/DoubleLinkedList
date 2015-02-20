@@ -28,92 +28,108 @@ list_p CreateList (int (*destroy) (const void *data_p),
 }
 
 int DestroyList(list_p myList_p){
-	node_p temp;
-	for (temp = myList_p->head_p; temp->next_p != NULL; temp = temp->next_p)
+	if (myList_p == NULL)
 	{
-	 	myList_p->destroy(temp->data_p);
-	 	free(temp);
+		return EXIT_FAILURE;
 	}
-	free(myList_p); 
-	return EXIT_SUCCESS;
+	else{
+		node_p temp;
+		for (temp = myList_p->head_p; temp->next_p != NULL; temp = temp->next_p)
+		{
+		 	myList_p->destroy(temp->data_p);
+		 	free(temp);
+		}
+		free(myList_p); 
+		return EXIT_SUCCESS;
+	}
 }
 
 
 int Delete(list_p myList_p, node_p item_p, void **data_h){
-	node_p temp;
-	for (temp = myList_p->head_p; temp->next_p != NULL; temp = temp->next_p)
-	{
-	 	if (temp == item_p)
-	 	{
-	 		data_h = &item_p->data_p;
-
-	 		if(temp == myList_p->head_p)
-	 		{
-	 			myList_p->head_p = temp->next_p;
-	 			temp->next_p->prev_p = NULL;
-	 		}
-	 		else{
-	 			if(temp == myList_p->tail_p)
-		 		{
-		 			myList_p->tail_p = temp->prev_p;
-		 			temp->prev_p->next_p = NULL;
-		 		}
-		 		else
-		 		{
-		 			temp->prev_p->next_p = temp->next_p;
-		 			temp->next_p->prev_p = temp->prev_p;
-		 		}
-	 		}
-	 		myList_p->destroy(temp->data_p);
-	 		free(temp);
-	 		myList_p->numItems--;
-
-	 		break;
-	 	}
+	if ((myList_p == NULL)||(item_p == NULL)){
+		return EXIT_FAILURE;
 	}
-	return EXIT_SUCCESS;
+	else {
+		node_p temp;
+		for (temp = myList_p->head_p; temp->next_p != NULL; temp = temp->next_p)
+		{
+		 	if (temp == item_p)
+		 	{
+		 		data_h = &item_p->data_p;
+
+		 		if(temp == myList_p->head_p)
+		 		{
+		 			myList_p->head_p = temp->next_p;
+		 			temp->next_p->prev_p = NULL;
+		 		}
+		 		else{
+		 			if(temp == myList_p->tail_p)
+			 		{
+			 			myList_p->tail_p = temp->prev_p;
+			 			temp->prev_p->next_p = NULL;
+			 		}
+			 		else
+			 		{
+			 			temp->prev_p->next_p = temp->next_p;
+			 			temp->next_p->prev_p = temp->prev_p;
+			 		}
+		 		}
+		 		free(temp);
+		 		myList_p->numItems--;
+
+		 		break;
+		 	}
+		}
+		return EXIT_SUCCESS;
+	}
 }
 
 int Insert(list_p myList_p, node_p item_p, const void *data_p){
 	
-	node_p temp = malloc(sizeof(node_p));
-	temp->data_p = myList_p->copy(data_p);
-
-	if(myList_p->numItems == 0)
+	if (myList_p == NULL)
 	{
-		myList_p->head_p = temp;
-		temp->prev_p = NULL;
-		temp->next_p = NULL;
-		myList_p->tail_p = temp;
-		myList_p->numItems++;
+		return EXIT_FAILURE;
 	}
 	else {
-		if (item_p == NULL)
+		node_p temp = malloc(sizeof(node_p));
+		temp->data_p = myList_p->copy(data_p);
+
+		if(myList_p->numItems == 0)
 		{
-			myList_p->tail_p->next_p = temp;
+			myList_p->head_p = temp;
+			temp->prev_p = NULL;
 			temp->next_p = NULL;
-			temp->prev_p =  myList_p->tail_p;
 			myList_p->tail_p = temp;
 			myList_p->numItems++;
 		}
-		else
-		{
-			if(NULL == item_p->prev_p) /*Checking node for head*/
+		else {
+			if (item_p == NULL)
 			{
-				myList_p->head_p = temp;
+				myList_p->tail_p->next_p = temp;
+				temp->next_p = NULL;
+				temp->prev_p =  myList_p->tail_p;
+				myList_p->tail_p = temp;
+				myList_p->numItems++;
 			}
 			else
 			{
-				item_p->prev_p->next_p = temp;
+				if(NULL == item_p->prev_p) /*Checking node for head*/
+				{
+					myList_p->head_p = temp;
+				}
+				else
+				{
+					item_p->prev_p->next_p = temp;
+				}
+				temp->prev_p = item_p->prev_p;
+				temp->next_p = item_p;
+				item_p->prev_p = temp;
+
 			}
-			temp->prev_p = item_p->prev_p;
-			temp->next_p = item_p;
-			item_p->prev_p = temp;
-
 		}
+		return EXIT_SUCCESS;
 	}
-	return EXIT_SUCCESS;
-
+	
 }
 
 list_p DuplicateList (list_p sourceList_p) {
@@ -154,13 +170,20 @@ int SortList (list_p myList_p, int key){
 }
 
 int PrintList(list_p myList_p){
-	node_p temp;
-	for (temp = myList_p->head_p; temp != NULL; temp = temp->next_p)
+	if (myList_p == NULL)
 	{
-		myList_p->print(temp->data_p);
+		return EXIT_FAILURE;
 	}
-	
-	return EXIT_SUCCESS;
+	else
+	{
+		node_p temp;
+		for (temp = myList_p->head_p; temp != NULL; temp = temp->next_p)
+		{
+			myList_p->print(temp->data_p);
+		}
+		
+		return EXIT_SUCCESS;
+	}
 }
 
 node_p FindInList (list_p myList_p, const void *value_p, int key){
