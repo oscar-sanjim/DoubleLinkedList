@@ -56,24 +56,25 @@ int Delete(list_p myList_p, node_p item_p, void **data_h){
 			temp = myList_p->head_p;
 			myList_p->head_p = temp->next_p;
 		 	temp->next_p->prev_p = NULL;
+		 	myList_p->destroy(temp->data_p);
 		 	free(temp);
 			myList_p->numItems--;
 		}
 		else
 		{
-			for (temp = myList_p->head_p; temp->next_p != NULL; temp = temp->next_p)
+			for (temp = myList_p->head_p; temp != NULL; temp = temp->next_p)
 			{
-			 	if (temp == item_p)
+				if (myList_p->compare(temp->data_p,item_p->data_p,2) == 0)
 			 	{
 			 		data_h = &item_p->data_p;
 
-			 		if(temp == myList_p->head_p)
+			 		if(myList_p->compare(temp->data_p,myList_p->head_p->data_p,2) == 0)
 			 		{
 			 			myList_p->head_p = temp->next_p;
 			 			temp->next_p->prev_p = NULL;
 			 		}
 			 		else{
-			 			if(temp == myList_p->tail_p)
+			 			if(myList_p->compare(temp->data_p,myList_p->tail_p->data_p,2) == 0)
 				 		{
 				 			myList_p->tail_p = temp->prev_p;
 				 			temp->prev_p->next_p = NULL;
@@ -84,6 +85,7 @@ int Delete(list_p myList_p, node_p item_p, void **data_h){
 				 			temp->next_p->prev_p = temp->prev_p;
 				 		}
 			 		}
+			 		myList_p->destroy(temp->data_p);
 			 		free(temp);
 			 		myList_p->numItems--;
 
@@ -96,7 +98,6 @@ int Delete(list_p myList_p, node_p item_p, void **data_h){
 }
 
 int Insert(list_p myList_p, node_p item_p, const void *data_p){
-	
 	if (myList_p == NULL)
 	{
 		return EXIT_FAILURE;
@@ -104,7 +105,6 @@ int Insert(list_p myList_p, node_p item_p, const void *data_p){
 	else {
 		node_p temp = malloc(sizeof(node_p));
 		temp->data_p = myList_p->copy(data_p);
-
 		if(myList_p->numItems == 0)
 		{
 			myList_p->head_p = temp;
@@ -140,7 +140,6 @@ int Insert(list_p myList_p, node_p item_p, const void *data_p){
 		}
 		return EXIT_SUCCESS;
 	}
-	
 }
 
 list_p DuplicateList (list_p sourceList_p) {
