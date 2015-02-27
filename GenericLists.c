@@ -13,7 +13,7 @@ list_p CreateList (int (*destroy) (const void *data_p),
                                         int key),
                       void *  (* copy)(const void *source_p)) {
 
-	list_p newList = malloc(sizeof(list));
+	list_p newList =(list_p) malloc(sizeof(list));
 
 	newList->numItems = 0;
 	newList->head_p = NULL;
@@ -34,7 +34,7 @@ int DestroyList(list_p myList_p){
 	}
 	else{
 		node_p temp;
-		for (temp = myList_p->head_p; temp->next_p != NULL; temp = temp->next_p)
+		for (temp =(node_p)myList_p->head_p; temp != NULL; temp = temp->next_p)
 		{
 		 	myList_p->destroy(temp->data_p);
 		 	free(temp);
@@ -51,12 +51,14 @@ int Delete(list_p myList_p, node_p item_p, void **data_h){
 	}
 	else {
 		node_p temp;
+		*data_h = item_p->data_p;
+		//printf("lol\n");
+		myList_p->print(*data_h);
 		if(item_p == NULL)
 		{
 			temp = myList_p->head_p;
 			myList_p->head_p = temp->next_p;
 		 	temp->next_p->prev_p = NULL;
-		 	myList_p->destroy(temp->data_p);
 		 	free(temp);
 			myList_p->numItems--;
 		}
@@ -85,7 +87,6 @@ int Delete(list_p myList_p, node_p item_p, void **data_h){
 				 			temp->next_p->prev_p = temp->prev_p;
 				 		}
 			 		}
-			 		myList_p->destroy(temp->data_p);
 			 		free(temp);
 			 		myList_p->numItems--;
 
@@ -103,8 +104,8 @@ int Insert(list_p myList_p, node_p item_p, const void *data_p){
 		return EXIT_FAILURE;
 	}
 	else {
-		node_p temp = malloc(sizeof(node_p));
-		temp->data_p = myList_p->copy(data_p);
+		node_p temp = (node_p) malloc(sizeof(node));
+		temp->data_p = data_p;
 		if(myList_p->numItems == 0)
 		{
 			myList_p->head_p = temp;
@@ -143,9 +144,9 @@ int Insert(list_p myList_p, node_p item_p, const void *data_p){
 }
 
 list_p DuplicateList (list_p sourceList_p) {
-	list_p newlist = malloc(sizeof(list_p));
-	node_p temp = malloc(sizeof(node_p));
-	node_p iterator = malloc(sizeof(node_p));
+	list_p newlist =(list_p) malloc(sizeof(list));
+	node_p temp =(node_p)  malloc(sizeof(node));
+	node_p iterator =(node_p) malloc(sizeof(node));
 
 	if(NULL != sourceList_p->head_p)
 	{
@@ -157,7 +158,7 @@ list_p DuplicateList (list_p sourceList_p) {
 
 		for(iterator=sourceList_p->head_p->next_p; iterator!=NULL; iterator=iterator->next_p)
 		{
-			node_p created = malloc(sizeof(node_p));
+			node_p created =(node_p) malloc(sizeof(node));
 			created->data_p = sourceList_p->copy(iterator->data_p);
 			created->prev_p = temp;
 			temp->next_p = created;

@@ -183,13 +183,20 @@ int main (int argc, const char * argv[]) {
                 printf("Error: failed to find selected node \n");
             }
             
+            printf("El apuntador de data_p es");
+            theList_p->print(data_p);
             if (Delete(theList_p, aNode,
                        (void **)&data_p) == 0 && theList_p->destroy!= NULL){
                 /* Call the user defined function to deallocate the data */
+                printf("El apuntador de data_p despues es");
+                theList_p->print(data_p);
                 theList_p->destroy(data_p);
             } else
                 printf("Error deleting from the middle\n");
-                
+            printf("Deletion from middle:\n");
+            if (PrintList(theList_p) != EXIT_SUCCESS)
+                printf("Error printing the list\n");
+
             /***** Test deletion at the head *****/
             if (Delete(theList_p, ListHead(theList_p),
                        (void **)&data_p) == 0 && theList_p->destroy!= NULL){
@@ -198,7 +205,7 @@ int main (int argc, const char * argv[]) {
             } else
                 printf("Error deleting from the head\n");
             
-            printf("Deletion from head & middle:\n");
+            printf("Deletion from hea\n");
             if (PrintList(theList_p) != EXIT_SUCCESS)
                 printf("Error printing the list\n");
 
