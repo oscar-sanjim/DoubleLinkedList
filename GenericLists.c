@@ -2,6 +2,11 @@
 #include "GenericLists.h"
 #include <stdio.h>
 
+/******************************/
+/**** Oscar Sanchez 1183806 ***/
+/**** jacob Rivera  1184125 ***/
+/******************************/
+
 //******************************
 //**** Definición de Métodos ***
 //******************************
@@ -36,14 +41,17 @@ int DestroyList(list_p myList_p){
 		return EXIT_FAILURE;
 	}
 	else{
-		node_p temp;
+		node_p temp, last;
 		/* Run throught the list, delete the data from each node and then free each node */
 		for (temp =(node_p)myList_p->head_p; temp != NULL; temp = temp->next_p)
 		{
 		 	myList_p->destroy(temp->data_p);
-		 	free(temp);
+		 	if (temp != myList_p->head_p)
+			 	free(last);
+		 	last = temp;
 		}
 		/* Free the structure of the list */
+		free(last);
 		free(myList_p); 
 		return EXIT_SUCCESS;
 	}

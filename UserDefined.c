@@ -4,6 +4,11 @@
 #include "UserDefined.h"
 #include "GenericLists.h"
 
+/******************************/
+/**** Oscar Sanchez 1183806 ***/
+/**** jacob Rivera  1184125 ***/
+/******************************/
+
 int PrintItem(const void *data)
 {
 	/* Create a cast pointer and asign the parameter */
